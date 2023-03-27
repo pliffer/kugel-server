@@ -1,0 +1,16 @@
+{
+    "name": "kugel-server",
+    "version": "1.0.0",
+    "description": "Inicia o express, dentro do kugel",
+    "main": "kugel-server.js",
+    "author": "Pliffer",
+    "license": "ISC",
+    "kugel": {
+        "version": 2
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "kugel-components": "github:pliffer/kugel-components",
+        "morgan": "^1.10.0"
+    }
+}
