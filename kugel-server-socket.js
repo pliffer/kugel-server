@@ -1,9 +1,10 @@
-const express = require('express');
-const http = require('http');
-const morgan = require('morgan');
-const socketIO = require('socket.io'); // Add this line
+const express    = require('express');
+const http       = require('http');
+const morgan     = require('morgan');
+const socketIO   = require('socket.io');
+const kugel      = require('kugel');
 
-const Components = require('kugel-components');
+const Component = kugel.Component;
 
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
@@ -13,11 +14,14 @@ let config = require(process.env.ROOT + '/package.json').kugel.config;
 
 const app = express();
 
-Components.on('express-middleware', middleware => {
+Component.on('express-middleware', middleware => {
+  // console.log('Middleware', middleware);
   app.use(middleware);
 });
 
-Components.on('express-static', static => {
+Component.on('express-static', static => {
+
+  // console.log('Static', static);
   app.use(express.static(static));
 });
 
@@ -28,7 +32,10 @@ if (config.morgan) {
 if (config.template_engine) {
   app.set('view engine', config.template_engine);
 
-  Components.on('express-views', viewPath => {
+  Component.on('express-views', viewPath => {
+
+    // console.log(viewPath);
+
     let views = app.get('views');
 
     if (typeof views == 'string') views = [views];
@@ -40,18 +47,23 @@ if (config.template_engine) {
 }
 
 const server = http.createServer(app);
-const io = socketIO(server); // Add this line
+const io     = socketIO(server);
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
+// io.on('connection', (socket) => {
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-});
+//   console.log('A user connected');
+
+//   socket.on('disconnect', () => {
+//     console.log('A user disconnected');
+//   });
+
+// });
 
 server.listen(port, () => {
-  Components.get('express-listen').add(app);
 
-  console.log(`@info http and socket listening on ${protocol}://${host}:${port}`);
+    Component.get('express-listen').add(app);
+    Component.get('socket-listen').add(io);
+
+    console.log(`@info http and socket listening on ${protocol}://${host}:${port}`);
+
 });

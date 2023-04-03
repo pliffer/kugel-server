@@ -1,8 +1,9 @@
 const express = require('express')
 const http    = require('http')
 const morgan  = require('morgan');
+const kugel   = require('kugel');
 
-const Components = require('kugel-components');
+const Component = kugel.Component;
 
 const port     = process.env.PORT     || 8080
 const host     = process.env.HOST     || 'localhost'
@@ -14,11 +15,15 @@ const app = express();
 
 Components.on('express-middleware', middleware => {
 
+    console.log('Middleware', middleware);
+
     app.use(middleware);
 
 });
 
 Components.on('express-static', static => {
+
+    console.log('STATIC', static);
 
     app.use(express.static(static));
 
