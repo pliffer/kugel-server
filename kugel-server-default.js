@@ -14,7 +14,7 @@ let config = require(process.env.ROOT + '/package.json').kugel.config;
 
 const app = express();
 
-Components.on('express-middleware', middleware => {
+Component.on('express-middleware', middleware => {
 
     console.log('Middleware', middleware);
 
@@ -22,7 +22,7 @@ Components.on('express-middleware', middleware => {
 
 });
 
-Components.on('express-static', static => {
+Component.on('express-static', static => {
 
     console.log('STATIC', static);
 
@@ -104,7 +104,7 @@ if(config.template_engine){
 
     app.set('view engine', config.template_engine);
 
-    Components.on('express-views', viewPath => {
+    Component.on('express-views', viewPath => {
 
         let views = app.get('views');
 
@@ -122,7 +122,7 @@ var server = http.createServer(app);
 
 server.listen(port, () => {
 
-    Components.get('express-listen').add(app);
+    Component.get('express-listen').add(app);
 
     console.log(`@info listening on ${protocol}://${host}:${port}`)
 
