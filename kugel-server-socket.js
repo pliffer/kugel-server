@@ -3,6 +3,7 @@ const http       = require('http');
 const morgan     = require('morgan');
 const socketIO   = require('socket.io');
 const kugel      = require('kugel');
+const fs         = require('fs');
 
 const Component = kugel.Component;
 
@@ -15,15 +16,55 @@ let config = require(process.env.ROOT + '/package.json').kugel.config;
 const app = express();
 
 Component.on('express-middleware', middleware => {
-  // console.log('Middleware', middleware);
-  app.use(middleware);
+    app.use(middleware);
 });
 
 Component.on('express-static', static => {
-
-  // console.log('Static', static);
-  app.use(express.static(static));
+    app.use(express.static(static));
 });
+
+if(config.logs?.ips){
+
+  app.use((req, res, next) => {
+
+      let ips = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+      if(ips) ips = ips.split(', ');
+
+      let ip = ips[0];
+
+      if(ip == '::1') ip = 'localhost';
+      if(ip == '::ffff:127.0.0.1') ip = 'localhost';
+
+      let route = req.originalUrl;
+
+      let logPath = process.cwd() + '/logs/404/' + ip + '/' + new Date().getFullYear() + '/' + new Date().getMonth();
+
+      if(!fs.existsSync(logPath)){
+
+          fs.mkdirSync(logPath, { recursive: true });
+
+      }
+
+      let logFile = logPath + '/' + new Date().getDate() + '.txt';
+
+      let log = '';
+
+      if(fs.existsSync(logFile)){
+
+          log = fs.readFileSync(logFile, 'utf-8');
+
+      }
+
+      log += `${new Date().toLocaleString()} - ${route}\n`;
+
+      fs.writeFileSync(logFile, log);
+
+      next();
+
+  });
+
+}
 
 if (config.morgan) {
   app.use(morgan(config.morgan));
