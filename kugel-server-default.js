@@ -16,15 +16,11 @@ const app = express();
 
 Component.on('express-middleware', middleware => {
 
-    console.log('Middleware', middleware);
-
     app.use(middleware);
 
 });
 
 Component.on('express-static', static => {
-
-    console.log('STATIC', static);
 
     app.use(express.static(static));
 
