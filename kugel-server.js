@@ -1,4 +1,6 @@
 const express = require('express');
+const morgan  = require('morgan');
+const fs      = require('fs');
 
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
@@ -6,7 +8,7 @@ const protocol = process.env.PROTOCOL || 'http';
 
 let config = require(process.env.ROOT + '/package.json').kugel.config;
 
-let main = main = require('./kugel-server-default.js');
+let main = require('./kugel-server-default.js');
 
 if(config.socketio){
 
