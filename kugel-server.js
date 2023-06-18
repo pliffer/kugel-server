@@ -1,6 +1,9 @@
-const express = require('express');
-const morgan  = require('morgan');
-const fs      = require('fs');
+const express  = require('express');
+const morgan   = require('morgan');
+const fs       = require('fs');
+const path     = require('path');
+const http     = require('http');
+const socketIO = require('socket.io');
 
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
@@ -8,11 +11,37 @@ const protocol = process.env.PROTOCOL || 'http';
 
 let config = require(process.env.ROOT + '/package.json').kugel.config;
 
-let main = require('./kugel-server-default.js');
+let main = (app, protocol, host, port) => {
+
+    var server = http.createServer(app);
+
+    server.listen(port, () => {
+    
+        Component.get('express-listen').add(app);
+    
+        console.log(`@info listening on ${protocol}://${host}:${port}`)
+    
+    });
+    
+}
 
 if(config.socketio){
 
-    main = require('./kugel-server-socket.js');
+    main = (app, protocol, host, port) => {
+
+		const server = http.createServer(app);
+		const io     = socketIO(server);
+	
+		server.listen(port, () => {
+	
+			Component.get('express-listen').add(app);
+			Component.get('socket-listen').add(io);
+	
+			console.log(`@info http and socket listening on ${protocol}://${host}:${port}`);
+	
+		});
+		
+	}
 
 }
 
