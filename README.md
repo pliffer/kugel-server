@@ -4,6 +4,8 @@
 
 O módulo **kugel-server** tem como objetivo iniciar o servidor express, dentro do framework kugel. Ele possui integração com socket.io e permite a configuração de middlewares, rotas estáticas e views para renderização.
 
+Recomenda-se o uso do kugel-server apenas para configurar views, arquivos estáticos e middlewares, e o uso do kugel-better-express para a criação de rotas e controllers.
+
 ## Instalação
 
 Instale o módulo como uma dependência do seu projeto:
