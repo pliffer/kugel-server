@@ -1,4 +1,4 @@
-README.md (revisado)
+README.md
 
 # kugel-server
 
@@ -18,7 +18,7 @@ Recomenda-se o uso do kugel-server apenas para configurar views, arquivos estát
 Instale o módulo como uma dependência do seu projeto:
 
 ```bash
-npm install --save kugel-server
+npm install --save github:pliffer/kugel-server
 ```
 
 ## Uso
