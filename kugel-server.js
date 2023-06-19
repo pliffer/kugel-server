@@ -4,6 +4,9 @@ const fs       = require('fs');
 const path     = require('path');
 const http     = require('http');
 const socketIO = require('socket.io');
+const kugel    = require('kugel');
+
+const Component = kugel.Component;
 
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
@@ -22,6 +25,10 @@ let main = (app, protocol, host, port) => {
         console.log(`@info listening on ${protocol}://${host}:${port}`)
     
     });
+
+	return {
+		app: app
+	}
     
 }
 
@@ -40,6 +47,11 @@ if(config.socketio){
 			console.log(`@info http and socket listening on ${protocol}://${host}:${port}`);
 	
 		});
+
+		return {
+			app: app,
+			io: io
+		}
 		
 	}
 
