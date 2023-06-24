@@ -5,6 +5,8 @@ const path     = require('path');
 const http     = require('http');
 const socketIO = require('socket.io');
 const kugel    = require('kugel');
+const cors     = require('cors');
+const fileUpload = require('express-fileupload');
 
 const Component = kugel.Component;
 
@@ -52,7 +54,7 @@ if(config.socketio){
 			app: app,
 			io: io
 		}
-		
+
 	}
 
 }
@@ -113,6 +115,44 @@ if(config.logs?.ips){
 		next();
 
 	});
+
+}
+
+if(config.upload){
+
+    console.log('Upload enabled');
+
+    app.use(fileUpload());
+
+}
+
+if(config.body_parser){
+
+    app.use(express.json({
+
+        limit: process.env.BODYPARSER_LIMIT || '10mb'
+
+    }));
+
+    app.use(express.urlencoded({
+
+        limit: process.env.BODYPARSER_LIMIT || '10mb',
+        extended: true
+
+    }));
+
+}
+
+if(config.cors){
+
+    app.use(cors({
+        origin: config.cors.origin || '*',
+        methods: config.cors.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: config.cors.headers || ['Content-Type', 'Authorization', 'X-Requested-With'],
+        credentials: config.cors.credentials || true,
+        optionsSuccessStatus: config.cors.optionStatus || 200,
+        preflightContinue: config.cors.preflightContinue || false
+    }));
 
 }
 
