@@ -65,11 +65,23 @@ main(app, protocol, host, port);
 
 if (config.morgan) {
 
+	if(process.env.VERBOSE === 'true'){
+
+		console.log('@info morgan middleware enabled', config.morgan);
+
+	}
+
     app.use(morgan(config.morgan));
 
 }
 
 if(config.template_engine){
+
+	if(process.env.VERBOSE === 'true'){
+
+		console.log('@info template engine enabled', config.template_engine);
+
+	}
 
     app.set('view engine', config.template_engine);
     
@@ -120,13 +132,23 @@ if(config.logs?.ips){
 
 if(config.upload){
 
-    console.log('Upload enabled');
+	if(process.env.VERBOSE === 'true'){
+
+		console.log('@info upload middleware enabled');
+
+	}
 
     app.use(fileUpload());
 
 }
 
 if(config.body_parser){
+
+	if(process.env.VERBOSE === 'true'){
+
+		console.log('@info body parser middleware enabled');
+
+	}
 
     app.use(express.json({
 
@@ -144,6 +166,12 @@ if(config.body_parser){
 }
 
 if(config.cors){
+
+	if(process.env.VERBOSE === 'true'){
+
+		console.log('@info cors middleware enabled');
+
+	}
 
     app.use(cors({
         origin: config.cors.origin || '*',
