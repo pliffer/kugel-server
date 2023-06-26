@@ -14,7 +14,7 @@ const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
 const protocol = process.env.PROTOCOL || 'http';
 
-let config = require(process.env.ROOT + '/package.json').kugel.config;
+let config = require(process.cwd() + '/package.json').kugel.config;
 
 let main = (app, protocol, host, port) => {
 
