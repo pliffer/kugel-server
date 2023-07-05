@@ -10,17 +10,26 @@ const fileUpload = require('express-fileupload');
 
 const Component = kugel.Component;
 
+// Configure dotenv based on process.cwd
+require('dotenv').config({
+	path: process.cwd() + '/.env'
+});
+
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
 const protocol = process.env.PROTOCOL || 'http';
 
 let packageJson = require(process.cwd() + '/package.json');
 
-if(!packageJson) throw new Error('package.json not found');
-if(!packageJson.kugel) throw new Error('kugel config not found');
-if(!packageJson.kugel.config) throw new Error('kugel config not found');
+let config = {};
 
-let config = packageJson.kugel.config;
+if(!packageJson) console.log('@warn package.json not found');
+else{
+
+	if(!packageJson.kugel) throw new Error('kugel config not found');
+	else config = packageJson.kugel.config || {};
+
+}
 
 let main = (app, protocol, host, port) => {
 
