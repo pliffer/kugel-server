@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "express": "^4.18.2",
+        "express-fileupload": "^1.4.0",
         "kugel-components": "github:pliffer/kugel-components",
         "morgan": "^1.10.0",
         "socket.io": "^4.7.1"
