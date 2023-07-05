@@ -14,7 +14,13 @@ const port = process.env.PORT || 8080;
 const host = process.env.HOST || 'localhost';
 const protocol = process.env.PROTOCOL || 'http';
 
-let config = require(process.cwd() + '/package.json').kugel.config;
+let packageJson = require(process.cwd() + '/package.json');
+
+if(!packageJson) throw new Error('package.json not found');
+if(!packageJson.kugel) throw new Error('kugel config not found');
+if(!packageJson.kugel.config) throw new Error('kugel config not found');
+
+let config = packageJson.kugel.config;
 
 let main = (app, protocol, host, port) => {
 
